@@ -1,6 +1,7 @@
 #install.packages("music")
 library(music)
 library(stringr)
+library(tidyverse)
 
 #120BPM so each beat = 0.5 seconds
 for (i in 1:16) {
@@ -73,7 +74,22 @@ for (i in 1:16) {
   }
 }
 
+wowu_chords <- rep(c(
+  rep(c("D4"), 4), 
+  rep(c("A3"), 4), 
+  rep(c("B3"), 4), 
+  rep(c("G3"), 4)), 36)
 
+wowu_bigrams <- data.frame(
+  chord1 = wowu_chords[-length(wowu_chords)],
+  chord2 = wowu_chords[-1]
+)
 
+wowu_bigrams |> 
+  group_by(chord1, chord2) |> 
+  count() |> 
+  ungroup() |> 
+  group_by(chord1) |> 
+  mutate(prob = n/sum(n))
 
 
