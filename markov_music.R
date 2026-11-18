@@ -32,9 +32,45 @@ bmr_chords <- bmr_chords$ccr.bad.moon.rising.chords |>
   str_extract_all("[A-Z]")
 
 for (i in 1:58) {
-  print(paste0(bmr_chords[i], "4"))
-  playChord(buildChord(paste0(bmr_chords[i], "4"), "major"), duration = 1)
-  Sys.sleep(0.5)
+  if (bmr_chords[i] == "D") {
+    playChord(buildChord(paste0(bmr_chords[i], "4"), "major"), duration = 2)
+    Sys.sleep(1)
+  }
+  
+  if (bmr_chords[i] == "A") {
+    playChord(buildChord(paste0(bmr_chords[i], "3"), "major"), duration = 1)
+    Sys.sleep(0.5)
+  }
+  
+  if (bmr_chords[i] == "G") {
+    playChord(buildChord(paste0(bmr_chords[i], "4"), "major"), duration = 1)
+    Sys.sleep(0.5)
+  }
+  
+}
+
+
+#With or Without you U2 - Repetitive 4beat D A Bm G
+for (i in 1:16) {
+  for (n in 1:4) {
+    playChord(buildChord("D4", "major"), duration = 0.25)
+    Sys.sleep(0.125)
+  }
+  
+  for (n in 1:4) {
+    playChord(buildChord("A3", "major"), duration = 0.25)
+    Sys.sleep(0.125)
+  }
+  
+  for (n in 1:4) {
+    playChord(buildChord("B3", "minor"), duration = 0.25)
+    Sys.sleep(0.125)
+  }
+  
+  for (n in 1:4) {
+    playChord(buildChord("G3", "major"), duration = 0.25)
+    Sys.sleep(0.125)
+  }
 }
 
 
