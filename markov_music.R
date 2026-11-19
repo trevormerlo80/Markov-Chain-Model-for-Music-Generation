@@ -98,7 +98,8 @@ wowu_bigrams_matrix <- wowu_bigrams |>
 
 wowu_bigrams_matrix <- wowu_bigrams_matrix |> 
   ungroup() |> 
-  select(-chord1)
+  select(-chord1) |> 
+  relocate(G3, .after = last_col())
 
 wowu_states <- c("A3", "B3", "D4", "G3")
 
