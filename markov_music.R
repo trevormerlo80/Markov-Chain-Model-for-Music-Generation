@@ -1,7 +1,9 @@
 #install.packages("music")
+#install.packages("markovchain")
 library(music)
 library(stringr)
 library(tidyverse)
+library(markovchain)
 
 #120BPM so each beat = 0.5 seconds
 for (i in 1:16) {
@@ -85,11 +87,34 @@ wowu_bigrams <- data.frame(
   chord2 = wowu_chords[-1]
 )
 
-wowu_bigrams |> 
+wowu_bigrams_matrix <- wowu_bigrams |> 
   group_by(chord1, chord2) |> 
   count() |> 
   ungroup() |> 
   group_by(chord1) |> 
-  mutate(prob = n/sum(n))
+  mutate(prob = n/sum(n)) |> 
+  select(chord1, chord2, prob) |>
+  pivot_wider(names_from = chord2, values_from = prob, values_fill = 0)
+
+wowu_bigrams_matrix <- wowu_bigrams_matrix |> 
+  ungroup() |> 
+  select(-chord1)
+
+wowu_states <- c("A3", "B3", "D4", "G3")
+
+row.names(wowu_bigrams_matrix) <- wowu_states
+  
+wowu_markov_chain <- new("markovchain", states = wowu_states, byrow = T, 
+                         transitionMatrix = wowu_bigrams_matrix, name = "WOWU")
+
+beats <- 32
+wowu_predict <- predict(object = wowu_markov_chain, newdata = "D4", n.ahead = beats)
+
+for (i in 1:beats) {
+  playChord(buildChord(wowu_predict[i], "major"), duration = 0.25)
+  Sys.sleep(0.125)
+}
+
+
 
 
