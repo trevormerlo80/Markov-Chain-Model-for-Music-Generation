@@ -107,8 +107,9 @@ row.names(wowu_bigrams_matrix) <- wowu_states
 wowu_markov_chain <- new("markovchain", states = wowu_states, byrow = T, 
                          transitionMatrix = wowu_bigrams_matrix, name = "WOWU")
 
-beats <- 32
-wowu_predict <- predict(object = wowu_markov_chain, newdata = "D4", n.ahead = beats)
+beats <- 64
+set.seed(1)
+wowu_predict <- markovchainSequence(n = beats, markovchain = wowu_markov_chain, t0 = "D4")
 
 for (i in 1:beats) {
   playChord(buildChord(wowu_predict[i], "major"), duration = 0.25)
